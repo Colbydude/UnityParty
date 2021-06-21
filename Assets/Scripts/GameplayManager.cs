@@ -40,7 +40,7 @@ public class GameplayManager : MonoBehaviour
     void MakeRoll()
     {
         // Generate random number for the current player to move.
-        m_currentMovementAction.SpacesToMove = m_random.Next(1, 10);
+        m_currentMovementAction.SpacesToMove = m_random.Next(1, 11);
         m_currentMovementAction.IsActive = true;
         RefreshCurrentSpacesText();
 
