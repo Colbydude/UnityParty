@@ -42,15 +42,15 @@ public class GameplayManager : MonoBehaviour
         m_currentMovementAction.SpacesToMove = m_random.Next(1, 10);
         m_currentMovementAction.IsActive = true;
 
-        CurrentPlayer.MoveToSpace(MakeRollFinished);
+        CurrentPlayer.MoveToSpace(MoveToSpaceFinished);
     }
 
-    void MakeRollFinished()
+    void MoveToSpaceFinished()
     {
         m_currentMovementAction.SpacesToMove--;
         if (m_currentMovementAction.SpacesToMove > 0)
         {
-            CurrentPlayer.MoveToSpace(MakeRollFinished);
+            CurrentPlayer.MoveToSpace(MoveToSpaceFinished);
         }
         else
         {
