@@ -4,9 +4,18 @@ using UnityEngine;
 
 public class CharacterController : MonoBehaviour
 {
+    // =====================================================
+    // Publics
     public BoardSpace CurrentSpace;
     public int MovesRemaining;
     public float SpeedPerSecond = 2;
+
+    public delegate void MoveToSpaceFinishedDelegate();
+
+    // =====================================================
+    // Privates
+    private bool m_isMoving;
+    private MoveToSpaceFinishedDelegate m_moveToSpaceFinishedCallback;
 
     // =====================================================
     // Static Privates
@@ -22,13 +31,13 @@ public class CharacterController : MonoBehaviour
     void Update()
     {
         // Fire off "moved(?)" event once destination space is reached.
-        if (MovesRemaining > 0)
+        if (m_isMoving)
         {
-            MoveToSpace();
+            UpdateMoveToSpace();
         }
     }
 
-    void MoveToSpace()
+    void UpdateMoveToSpace()
     {
         // Perform any movement necessary.
         Vector3 ourPosition = m_characterTransform.position;
@@ -43,10 +52,24 @@ public class CharacterController : MonoBehaviour
         }
     }
 
+    public void MoveToSpace(MoveToSpaceFinishedDelegate callback)
+    {
+        m_isMoving = true;
+        m_moveToSpaceFinishedCallback = callback;
+    }
+
     void MoveToSpaceFinished()
     {
         // Decrement move counter.
-        MovesRemaining--;
         CurrentSpace = CurrentSpace.NextSpace;
+        m_isMoving = false;
+
+        // Fire off signal that we're done or something.
+        if (m_moveToSpaceFinishedCallback != null)
+        {
+            MoveToSpaceFinishedDelegate temp = m_moveToSpaceFinishedCallback;
+            m_moveToSpaceFinishedCallback = null;
+            temp();
+        }
     }
 }
