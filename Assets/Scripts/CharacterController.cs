@@ -7,8 +7,7 @@ public class CharacterController : MonoBehaviour
     // =====================================================
     // Publics
     public BoardSpace CurrentSpace;
-    public int MovesRemaining;
-    public float SpeedPerSecond = 2;
+    public float SpeedPerSecond = 10;
 
     public delegate void MoveToSpaceFinishedDelegate();
 
@@ -30,7 +29,7 @@ public class CharacterController : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        // Fire off "moved(?)" event once destination space is reached.
+        // Move to the next space if we are currently moving.
         if (m_isMoving)
         {
             UpdateMoveToSpace();
@@ -41,7 +40,7 @@ public class CharacterController : MonoBehaviour
     {
         // Perform any movement necessary.
         Vector3 ourPosition = m_characterTransform.position;
-        Vector3 targetPosition = CurrentSpace.NextSpace.transform.position;
+        Vector3 targetPosition = CurrentSpace.transform.position;
         targetPosition.y = ourPosition.y;
         m_characterTransform.position = Vector3.MoveTowards(ourPosition, targetPosition, Time.deltaTime * SpeedPerSecond);
 
@@ -54,6 +53,9 @@ public class CharacterController : MonoBehaviour
 
     public void MoveToSpace(MoveToSpaceFinishedDelegate callback)
     {
+        // Move to the space we've selected next (if selectable).
+        CurrentSpace = CurrentSpace.NextSpace;
+
         m_isMoving = true;
         m_moveToSpaceFinishedCallback = callback;
     }
@@ -61,7 +63,6 @@ public class CharacterController : MonoBehaviour
     void MoveToSpaceFinished()
     {
         // Decrement move counter.
-        CurrentSpace = CurrentSpace.NextSpace;
         m_isMoving = false;
 
         // Fire off signal that we're done or something.

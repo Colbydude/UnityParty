@@ -23,16 +23,17 @@ public class GameplayManager : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        int seed = 4;
-        m_random = new System.Random(seed);
-
-        MakeRoll();
+        m_random = new System.Random();
     }
 
     // Update is called once per frame
     void Update()
     {
-        
+        bool isMakeRollKeyDown = Input.GetKeyDown(KeyCode.Space);
+        if (isMakeRollKeyDown && !m_currentMovementAction.IsActive)
+        {
+            MakeRoll();
+        }
     }
 
     void MakeRoll()
