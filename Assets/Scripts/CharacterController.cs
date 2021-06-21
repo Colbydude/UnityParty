@@ -9,7 +9,7 @@ public class CharacterController : MonoBehaviour
     public BoardSpace CurrentSpace;
     public float SpeedPerSecond = 10;
 
-    public delegate void MoveToSpaceFinishedDelegate();
+    public delegate void MoveToSpaceFinishedDelegate(BoardSpace newSpace);
 
     // =====================================================
     // Privates
@@ -70,7 +70,7 @@ public class CharacterController : MonoBehaviour
         {
             MoveToSpaceFinishedDelegate temp = m_moveToSpaceFinishedCallback;
             m_moveToSpaceFinishedCallback = null;
-            temp();
+            temp(CurrentSpace);
         }
     }
 }

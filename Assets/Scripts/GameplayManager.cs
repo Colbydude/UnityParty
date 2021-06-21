@@ -14,6 +14,7 @@ public class GameplayManager : MonoBehaviour
     // =====================================================
     // Publics
     public CharacterController CurrentPlayer;
+    public TMPro.TMP_Text CurrentSpacesText;
 
     // =====================================================
     // Privates
@@ -41,20 +42,42 @@ public class GameplayManager : MonoBehaviour
         // Generate random number for the current player to move.
         m_currentMovementAction.SpacesToMove = m_random.Next(1, 10);
         m_currentMovementAction.IsActive = true;
+        RefreshCurrentSpacesText();
 
         CurrentPlayer.MoveToSpace(MoveToSpaceFinished);
     }
 
-    void MoveToSpaceFinished()
+    void MoveToSpaceFinished(BoardSpace newSpace)
     {
-        m_currentMovementAction.SpacesToMove--;
-        if (m_currentMovementAction.SpacesToMove > 0)
+        // Check if we should decrement the move counter.
+        if (!newSpace.Flags.HasFlag(BoardSpace.SpaceFlags.DoesNotDecrementMoveCounter))
         {
-            CurrentPlayer.MoveToSpace(MoveToSpaceFinished);
+            m_currentMovementAction.SpacesToMove--;
+            RefreshCurrentSpacesText();
+        }
+
+        if (newSpace.Flags.HasFlag(BoardSpace.SpaceFlags.Stoppable))
+        {
+            // uhhh transfer control to a different controller/manager?
+            // would probably have some data in the BoardSpace to point to whatever is taking control.
+            // the new manager needs some sort of "Finished" function so we know to continue moving afterwards (if spaces to move left).
         }
         else
         {
-            m_currentMovementAction.IsActive = false;
+            if (m_currentMovementAction.SpacesToMove > 0)
+            {
+                CurrentPlayer.MoveToSpace(MoveToSpaceFinished);
+            }
+            else
+            {
+                m_currentMovementAction.IsActive = false;
+            }
         }
+    }
+
+    void RefreshCurrentSpacesText()
+    {
+        // Update text above player.
+        CurrentSpacesText.text = m_currentMovementAction.SpacesToMove.ToString();
     }
 }
