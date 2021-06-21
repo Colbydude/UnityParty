@@ -4,8 +4,8 @@ using UnityEngine;
 
 public class BoardSpace : MonoBehaviour
 {
-    public GameObject NextSpace;
-    public GameObject PreviousSpace;
+    public BoardSpace NextSpace;
+    public BoardSpace PreviousSpace;
 
     // Start is called before the first frame update
     void Start()
