@@ -30,8 +30,12 @@ public class GameplayManager : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        bool isMakeRollKeyDown = Input.GetKeyDown(KeyCode.Space);
-        if (isMakeRollKeyDown && !m_currentMovementAction.IsActive)
+
+    }
+
+    public void HandlePlayerInputConfirm()
+    {
+        if (!m_currentMovementAction.IsActive)
         {
             MakeRoll();
         }
