@@ -75,6 +75,9 @@ public class GameplayManager : MonoBehaviour
             else
             {
                 m_currentMovementAction.IsActive = false;
+
+                //Character rotates south
+                CurrentPlayer.transform.LookAt( CurrentPlayer.transform.position - new Vector3(0,0,10) );
             }
         }
     }

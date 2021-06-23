@@ -44,6 +44,9 @@ public class BoardPlayerController : MonoBehaviour
         targetPosition.y = ourPosition.y;
         m_characterTransform.position = Vector3.MoveTowards(ourPosition, targetPosition, Time.deltaTime * SpeedPerSecond);
 
+        //Character rotates towards the target space
+        m_characterTransform.transform.LookAt(targetPosition);
+
         if (m_characterTransform.position.Equals(targetPosition))
         {
             // Begin moving to next space.
