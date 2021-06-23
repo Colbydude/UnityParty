@@ -13,7 +13,7 @@ public class GameplayManager : MonoBehaviour
 {
     // =====================================================
     // Publics
-    public CharacterController CurrentPlayer;
+    public BoardPlayerController CurrentPlayer;
     public TMPro.TMP_Text CurrentSpacesText;
 
     // =====================================================
