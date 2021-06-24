@@ -153,9 +153,10 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   boardSpaces:
-  - position: {x: 0, y: 0, z: 0}
-  - position: {x: 0, y: 0, z: 0}
-  - position: {x: 0, y: 0, z: 0}
+  - position: {x: 1, y: 0, z: 0}
+  - position: {x: -1, y: 0, z: 0}
+  - position: {x: 0, y: 0, z: 1}
+  - position: {x: 0, y: 0, z: -1}
 --- !u!4 &199001942
 Transform:
   m_ObjectHideFlags: 0

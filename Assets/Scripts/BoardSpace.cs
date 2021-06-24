@@ -31,5 +31,10 @@ namespace UnityParty
 
             return position;
         }
+
+        public void UpdatePosition(Vector3 position)
+        {
+            this.position += position;
+        }
     }
 }

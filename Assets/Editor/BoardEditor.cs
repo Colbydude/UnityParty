@@ -18,13 +18,30 @@ namespace UnityParty.Editor
             boardSpaces = targetBoard.GetBoardSpaces();
         }
 
+        private void OnSceneGUI()
+        {
+            bool needsRepaint = false;
+
+            if (boardSpaces != null) {
+                foreach (BoardSpace space in boardSpaces) {
+                    // @NOTE: The |= will short circuit the rest of the foreach calls when
+                    //        DrawSpaceInScene() returns true.
+                    needsRepaint |= DrawSpaceInScene(space);
+                }
+            }
+
+            if (needsRepaint) {
+                Repaint();
+            }
+        }
+
         public override void OnInspectorGUI()
         {
             base.OnInspectorGUI();
             bool needsRepaint = false;
 
             EditorGUILayout.BeginVertical();
-            EditorGUILayout.LabelField("Spaces");
+                EditorGUILayout.LabelField("Spaces");
 
                 if (boardSpaces != null) {
                     int deleteIndex = -1;
@@ -34,17 +51,41 @@ namespace UnityParty.Editor
                         BoardSpace space = boardSpaces[i];
 
                         if (space == selectedBoardSpace) {
-                            GUI.color = Color.blue;
+                            GUI.color = Color.cyan;
                         }
 
+                        // Individual space row.
                         EditorGUILayout.BeginHorizontal();
+                            // Editable XYZ coordinates.
+                            EditorGUI.BeginChangeCheck();
 
-                            EditorGUILayout.Vector3Field("", space.GetPosition());
+                                Vector3 oldPosition = space.GetPosition();
+                                Vector3 newPosition = EditorGUILayout.Vector3Field("", oldPosition);
 
+                            if (EditorGUI.EndChangeCheck()) {
+                                Undo.RecordObject(targetBoard, "Board Space Moved");
+                                space.UpdatePosition(newPosition - oldPosition);
+                            }
+
+                            // TEMP select space button.
+                            // if (GUILayout.Button(EditorGUIUtility.IconContent("d_MoveTool"), GUILayout.Width(25))) {
+                            //     if (selectedBoardSpace == space) {
+                            //         selectedBoardSpace = null;
+                            //     }
+                            //     else {
+                            //         selectedBoardSpace = space;
+                            //     }
+
+                            //     needsRepaint = true;
+                            // }
+
+                            // Remove space button.
                             if (GUILayout.Button(EditorGUIUtility.IconContent("TreeEditor.Trash"), GUILayout.Width(25))) {
                                 deleteIndex = i;
                                 needsRepaint = true;
                             }
+
+                            GUI.color = guiColor;
 
                         EditorGUILayout.EndHorizontal();
                     }
@@ -58,14 +99,13 @@ namespace UnityParty.Editor
                     }
                 }
 
-                if (GUILayout.Button("Add Space"))
-                {
+                // Add space button.
+                if (GUILayout.Button("Add Space")) {
                     Undo.RecordObject(targetBoard, "Board Space Added");
 
                     BoardSpace space = new BoardSpace();
                     targetBoard.AddBoardSpace(space);
-
-                    Debug.Log(boardSpaces.Count);
+                    selectedBoardSpace = space;
 
                     needsRepaint = true;
                 }
@@ -78,7 +118,61 @@ namespace UnityParty.Editor
             }
         }
 
-        // Menu item for creating a board.
+        /// <summary>
+        /// Draws a selectable BoardSpace in the scene view.
+        /// </summary>
+        /// <param name="space">The BoardSpace to be drawn.</param>
+        private bool DrawSpaceInScene(BoardSpace space)
+        {
+            if (space == null) {
+                return false;
+            }
+
+            bool needsRepaint = false;
+
+            // Non-serialized field. Data gets lost during serialize updates?
+            space.SetBoard(targetBoard);
+
+            // Draw the selected space as a cyan sphere.
+            if (selectedBoardSpace == space) {
+                Color c = Handles.color;
+                Handles.color = Color.cyan;
+
+                // Process moving the sphere with the position handle.
+                EditorGUI.BeginChangeCheck();
+
+                    Vector3 oldPosition = space.GetPosition();
+                    Vector3 newPosition = Handles.PositionHandle(oldPosition, Quaternion.identity);
+
+                    float handleSize = HandleUtility.GetHandleSize(newPosition);
+
+                    Handles.SphereHandleCap(-1, newPosition, Quaternion.identity, 0.25f * handleSize, EventType.Repaint);
+
+                if (EditorGUI.EndChangeCheck()) {
+                    Undo.RecordObject(targetBoard, "Board Space Moved");
+                    space.UpdatePosition(newPosition - oldPosition);
+                }
+
+                Handles.color = c;
+            }
+            // Draw non-selected spaces as a white circle.
+            else {
+                Vector3 position = space.GetPosition();
+                float handleSize = HandleUtility.GetHandleSize(position);
+
+                // Select the space if you click on it in the scene.
+                if (Handles.Button(position, Quaternion.identity, 0.25f * handleSize, 0.25f * handleSize, Handles.SphereHandleCap)) {
+                    needsRepaint = true;
+                    selectedBoardSpace = space;
+                }
+            }
+
+            return needsRepaint;
+        }
+
+        /// <summary>
+        /// Adds a menu item to create a Board game object in the scene.
+        /// </summary>
         [MenuItem("GameObject/UnityParty/Create Board")]
         public static void CreateBoardManager()
         {
