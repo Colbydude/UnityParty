@@ -10,7 +10,7 @@ namespace UnityParty
         Stoppable = 0x02,                       // User stops on the space, control is passed to a different handler(?)
         Flag3 = 0x04,
         Flag4 = 0x08,
-    }
+    };
 
     [Serializable]
     public class BoardSpace

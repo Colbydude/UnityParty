@@ -2,6 +2,8 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityParty.Helpers;
+using UnityParty.Helpers.States;
 
 namespace UnityParty
 {
@@ -15,7 +17,7 @@ namespace UnityParty
     {
         // =====================================================
         // Publics
-        public CharacterController CurrentPlayer;
+        public BoardPlayerController CurrentPlayer;
         public TMPro.TMP_Text CurrentSpacesText;
 
         // =====================================================
@@ -32,8 +34,13 @@ namespace UnityParty
         // Update is called once per frame
         void Update()
         {
-            bool isMakeRollKeyDown = Input.GetKeyDown(KeyCode.Space);
-            if (isMakeRollKeyDown && !m_currentMovementAction.IsActive)
+
+        }
+
+        public void HandlePlayerInputConfirm()
+        {
+            IState playerCurrentState = CurrentPlayer.GetPlayerState();
+            if (!m_currentMovementAction.IsActive && playerCurrentState.GetType() == typeof(WaitingForInput))
             {
                 MakeRoll();
             }
@@ -73,6 +80,9 @@ namespace UnityParty
                 else
                 {
                     m_currentMovementAction.IsActive = false;
+
+                    // End Player turn
+                    CurrentPlayer.EndTurn();
                 }
             }
         }
