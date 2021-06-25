@@ -29,6 +29,7 @@ public class BoardPlayerController : MonoBehaviour
     void Start()
     {
         m_characterTransform = gameObject.transform;
+
         m_playerStateMachine.AddState<Inactive>();
         m_playerStateMachine.AddState<WaitingForInput>();
         m_playerStateMachine.AddState<Walking>();

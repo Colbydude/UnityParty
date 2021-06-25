@@ -1,4 +1,5 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -11,6 +12,11 @@ namespace Assets.Helper
 
         public void AddState<T>() where T : IState, new()
         {
+            if (GetState<T>() != null)
+            {
+                throw new ArgumentException("State already exists in state machine", typeof(T).ToString());
+            }               
+
             m_states.Add(new T());
 
             if (m_states.Count == 1)
@@ -19,16 +25,17 @@ namespace Assets.Helper
             }
         }
 
-        public void ChangeState<T>() 
+        public void ChangeState<T>() where T : IState
         {
-            foreach (IState state in m_states)
+            IState nextState = GetState<T>();
+            if (nextState == null)
             {
-                if (state.GetType() == typeof(T))
-                {
-                    m_currState = state;
-                    state.Start();
-                    break;
-                }
+                throw new ArgumentException("State does not exist in state machine", typeof(T).ToString());
+            }
+            else
+            {
+                m_currState = nextState;
+                m_currState.Start();
             }
         }
 
@@ -39,7 +46,22 @@ namespace Assets.Helper
 
         public void Update()
         {
-            m_currState.Update();
+            if (m_currState != null)
+            {
+                m_currState.Update();
+            }
+        }
+
+        private IState GetState<T>()
+        {            
+            foreach (IState state in m_states)
+            {
+                if (state is T)
+                {
+                    return state;
+                }
+            }
+            return null;
         }
     }
 }
