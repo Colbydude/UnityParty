@@ -1,3 +1,5 @@
+using Assets.Helper;
+using Assets.Helper.States;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -16,7 +18,8 @@ public class BoardPlayerController : MonoBehaviour
     private bool m_isMoving;
     private MoveToSpaceFinishedDelegate m_moveToSpaceFinishedCallback;
     private bool m_isRotating;
-    private Quaternion targetDir;
+    private Quaternion m_targetDir;
+    private StateMachine m_playerStateMachine = new StateMachine();
 
     // =====================================================
     // Static Privates
@@ -26,6 +29,12 @@ public class BoardPlayerController : MonoBehaviour
     void Start()
     {
         m_characterTransform = gameObject.transform;
+        m_playerStateMachine.AddState<Inactive>();
+        m_playerStateMachine.AddState<WaitingForInput>();
+        m_playerStateMachine.AddState<Walking>();
+
+        //change later
+        m_playerStateMachine.ChangeState<WaitingForInput>();
     }
 
     // Update is called once per frame
@@ -69,6 +78,12 @@ public class BoardPlayerController : MonoBehaviour
 
         m_isMoving = true;
         m_moveToSpaceFinishedCallback = callback;
+
+        //Update Player State
+        if (m_playerStateMachine.GetCurrentState().GetType() != typeof(Walking))
+        {
+            m_playerStateMachine.ChangeState<Walking>();
+        }
     }
 
     void MoveToSpaceFinished()
@@ -90,9 +105,9 @@ public class BoardPlayerController : MonoBehaviour
     {
         // Perform rotation over time
         Quaternion currDir = m_characterTransform.rotation;
-        m_characterTransform.rotation = Quaternion.RotateTowards(currDir, targetDir, Time.deltaTime * 500.0f);
+        m_characterTransform.rotation = Quaternion.RotateTowards(currDir, m_targetDir, Time.deltaTime * 500.0f);
 
-        if (m_characterTransform.rotation == targetDir)
+        if (m_characterTransform.rotation == m_targetDir)
         {
             // Rotation complete
             RotatePlayerFinished();
@@ -106,6 +121,18 @@ public class BoardPlayerController : MonoBehaviour
         // Place the target and the character position at the same height before finding the target direction
         target.y = m_characterTransform.position.y;
         FindTargetDirection(target);
+    }
+
+    public void EndTurn()
+    {
+        // Character rotates south (sometimes its a bit off, not sure why)
+        RotatePlayer(transform.position - new Vector3(0, 0, 10));
+        m_playerStateMachine.ChangeState<WaitingForInput>();
+    }
+
+    public IState GetPlayerState()
+    {
+        return m_playerStateMachine.GetCurrentState();
     }
 
     void RotatePlayerFinished()
@@ -128,8 +155,8 @@ public class BoardPlayerController : MonoBehaviour
         if (cross.y < 0) angle = -angle;
 
         // Store target angle
-        targetDir = m_characterTransform.rotation;
-        targetDir.eulerAngles = (targetDir.eulerAngles += new Vector3(0.0f, angle, 0.0f));
+        m_targetDir = m_characterTransform.rotation;
+        m_targetDir.eulerAngles = (m_targetDir.eulerAngles += new Vector3(0.0f, angle, 0.0f));
     }
 
 }

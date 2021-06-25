@@ -1,3 +1,5 @@
+using Assets.Helper;
+using Assets.Helper.States;
 using System;
 using System.Collections;
 using System.Collections.Generic;
@@ -35,7 +37,8 @@ public class GameplayManager : MonoBehaviour
 
     public void HandlePlayerInputConfirm()
     {
-        if (!m_currentMovementAction.IsActive)
+        IState playerCurrentState = CurrentPlayer.GetPlayerState();
+        if (!m_currentMovementAction.IsActive && playerCurrentState.GetType() == typeof(WaitingForInput))
         {
             MakeRoll();
         }
@@ -76,8 +79,8 @@ public class GameplayManager : MonoBehaviour
             {
                 m_currentMovementAction.IsActive = false;
 
-                //Character rotates south (sometimes its a bit off, not sure why)
-                CurrentPlayer.RotatePlayer( CurrentPlayer.transform.position - new Vector3(0,0,10) );
+                // End Player turn
+                CurrentPlayer.EndTurn();
             }
         }
     }
