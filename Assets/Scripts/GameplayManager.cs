@@ -13,7 +13,7 @@ public class GameplayManager : MonoBehaviour
 {
     // =====================================================
     // Publics
-    public CharacterController CurrentPlayer;
+    public BoardPlayerController CurrentPlayer;
     public TMPro.TMP_Text CurrentSpacesText;
 
     // =====================================================
@@ -75,6 +75,9 @@ public class GameplayManager : MonoBehaviour
             else
             {
                 m_currentMovementAction.IsActive = false;
+
+                //Character rotates south (sometimes its a bit off, not sure why)
+                CurrentPlayer.RotatePlayer( CurrentPlayer.transform.position - new Vector3(0,0,10) );
             }
         }
     }
