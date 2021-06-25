@@ -27,6 +27,10 @@ namespace Assets.Helper
 
         public void ChangeState<T>() where T : IState
         {
+            if (m_currState != null && typeof(T) == m_currState.GetType())
+            {
+                throw new ArgumentException("Cannot change state to current state", typeof(T).ToString());
+            }
             IState nextState = GetState<T>();
             if (nextState == null)
             {
