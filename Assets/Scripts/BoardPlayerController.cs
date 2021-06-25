@@ -119,17 +119,8 @@ public class BoardPlayerController : MonoBehaviour
         // Find angle from forward direction to target direction (current space)
         Vector3 forwardVec = m_characterTransform.forward;
         forwardVec.y = target.y;
-        Vector3 targetSpace = target - m_characterTransform.position;
-        targetSpace = Vector3.Normalize(targetSpace);
-        float angle = Vector3.Angle(forwardVec, targetSpace);
- 
-        // Check the direction of the angle via cross product
-        Vector3 cross = Vector3.Cross(forwardVec, targetSpace);
-        if (cross.y < 0) angle = -angle;
-
-        // Store target angle
-        targetDir = m_characterTransform.rotation;
-        targetDir.eulerAngles = (targetDir.eulerAngles += new Vector3(0.0f, angle, 0.0f));
+        Vector3 targetVec = target - m_characterTransform.position;
+        targetDir.SetLookRotation(targetVec);
     }
 
 }
