@@ -1,7 +1,7 @@
 ﻿using System.Collections;
 using UnityEngine;
 
-namespace Assets.Helper
+namespace UnityParty.Helpers
 {
     public interface IState
     {

@@ -3,7 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-namespace Assets.Helper
+namespace UnityParty.Helpers
 {
     public class StateMachine
     {
@@ -15,7 +15,7 @@ namespace Assets.Helper
             if (GetState<T>() != null)
             {
                 throw new ArgumentException("State already exists in state machine", typeof(T).ToString());
-            }               
+            }
 
             m_states.Add(new T());
 
@@ -31,7 +31,9 @@ namespace Assets.Helper
             {
                 throw new ArgumentException("Cannot change state to current state", typeof(T).ToString());
             }
+
             IState nextState = GetState<T>();
+
             if (nextState == null)
             {
                 throw new ArgumentException("State does not exist in state machine", typeof(T).ToString());
@@ -57,7 +59,7 @@ namespace Assets.Helper
         }
 
         private IState GetState<T>()
-        {            
+        {
             foreach (IState state in m_states)
             {
                 if (state is T)
@@ -65,6 +67,7 @@ namespace Assets.Helper
                     return state;
                 }
             }
+
             return null;
         }
     }

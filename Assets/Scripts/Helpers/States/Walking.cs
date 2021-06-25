@@ -1,7 +1,7 @@
 ﻿using System.Collections;
 using UnityEngine;
 
-namespace Assets.Helper.States
+namespace UnityParty.Helpers.States
 {
     public class Walking : IState
     {
