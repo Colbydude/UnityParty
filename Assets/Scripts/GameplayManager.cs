@@ -2,89 +2,95 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityParty.Helpers;
+using UnityParty.Helpers.States;
 
-struct MovementActionData
+namespace UnityParty
 {
-    public int SpacesToMove;
-    public bool IsActive;
-}
-
-public class GameplayManager : MonoBehaviour
-{
-    // =====================================================
-    // Publics
-    public BoardPlayerController CurrentPlayer;
-    public TMPro.TMP_Text CurrentSpacesText;
-
-    // =====================================================
-    // Privates
-    private MovementActionData m_currentMovementAction;
-    private System.Random m_random;
-
-    // Start is called before the first frame update
-    void Start()
+    struct MovementActionData
     {
-        m_random = new System.Random();
+        public int SpacesToMove;
+        public bool IsActive;
     }
 
-    // Update is called once per frame
-    void Update()
+    public class GameplayManager : MonoBehaviour
     {
+        // =====================================================
+        // Publics
+        public BoardPlayerController CurrentPlayer;
+        public TMPro.TMP_Text CurrentSpacesText;
 
-    }
+        // =====================================================
+        // Privates
+        private MovementActionData m_currentMovementAction;
+        private System.Random m_random;
 
-    public void HandlePlayerInputConfirm()
-    {
-        if (!m_currentMovementAction.IsActive)
+        // Start is called before the first frame update
+        void Start()
         {
-            MakeRoll();
-        }
-    }
-
-    void MakeRoll()
-    {
-        // Generate random number for the current player to move.
-        m_currentMovementAction.SpacesToMove = m_random.Next(1, 11);
-        m_currentMovementAction.IsActive = true;
-        RefreshCurrentSpacesText();
-
-        CurrentPlayer.MoveToSpace(MoveToSpaceFinished);
-    }
-
-    void MoveToSpaceFinished(BoardSpace newSpace)
-    {
-        // Check if we should decrement the move counter.
-        if (!newSpace.Flags.HasFlag(BoardSpace.SpaceFlags.DoesNotDecrementMoveCounter))
-        {
-            m_currentMovementAction.SpacesToMove--;
-            RefreshCurrentSpacesText();
+            m_random = new System.Random();
         }
 
-        if (newSpace.Flags.HasFlag(BoardSpace.SpaceFlags.Stoppable))
+        // Update is called once per frame
+        void Update()
         {
-            // uhhh transfer control to a different controller/manager?
-            // would probably have some data in the BoardSpace to point to whatever is taking control.
-            // the new manager needs some sort of "Finished" function so we know to continue moving afterwards (if spaces to move left).
+
         }
-        else
+
+        public void HandlePlayerInputConfirm()
         {
-            if (m_currentMovementAction.SpacesToMove > 0)
+            IState playerCurrentState = CurrentPlayer.GetPlayerState();
+            if (!m_currentMovementAction.IsActive && playerCurrentState.GetType() == typeof(WaitingForInput))
             {
-                CurrentPlayer.MoveToSpace(MoveToSpaceFinished);
+                MakeRoll();
+            }
+        }
+
+        void MakeRoll()
+        {
+            // Generate random number for the current player to move.
+            m_currentMovementAction.SpacesToMove = m_random.Next(1, 11);
+            m_currentMovementAction.IsActive = true;
+            RefreshCurrentSpacesText();
+
+            CurrentPlayer.MoveToSpace(MoveToSpaceFinished);
+        }
+
+        void MoveToSpaceFinished(BoardSpace newSpace)
+        {
+            // Check if we should decrement the move counter.
+            if (!newSpace.Flags.HasFlag(BoardSpace.SpaceFlags.DoesNotDecrementMoveCounter))
+            {
+                m_currentMovementAction.SpacesToMove--;
+                RefreshCurrentSpacesText();
+            }
+
+            if (newSpace.Flags.HasFlag(BoardSpace.SpaceFlags.Stoppable))
+            {
+                // uhhh transfer control to a different controller/manager?
+                // would probably have some data in the BoardSpace to point to whatever is taking control.
+                // the new manager needs some sort of "Finished" function so we know to continue moving afterwards (if spaces to move left).
             }
             else
             {
-                m_currentMovementAction.IsActive = false;
+                if (m_currentMovementAction.SpacesToMove > 0)
+                {
+                    CurrentPlayer.MoveToSpace(MoveToSpaceFinished);
+                }
+                else
+                {
+                    m_currentMovementAction.IsActive = false;
 
-                //Character rotates south (sometimes its a bit off, not sure why)
-                CurrentPlayer.RotatePlayer( CurrentPlayer.transform.position - new Vector3(0,0,10) );
+                    // End Player turn
+                    CurrentPlayer.EndTurn();
+                }
             }
         }
-    }
 
-    void RefreshCurrentSpacesText()
-    {
-        // Update text above player.
-        CurrentSpacesText.text = m_currentMovementAction.SpacesToMove.ToString();
+        void RefreshCurrentSpacesText()
+        {
+            // Update text above player.
+            CurrentSpacesText.text = m_currentMovementAction.SpacesToMove.ToString();
+        }
     }
 }
