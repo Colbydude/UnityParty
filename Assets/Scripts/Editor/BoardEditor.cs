@@ -12,6 +12,8 @@ namespace UnityParty.Editor
 
         BoardSpace selectedBoardSpace = null;   // The selected space we're editing.
 
+        bool isLinking = true;                  // Is performing a board space link action. @TEMP hard coded to true for now
+
         private void OnEnable()
         {
             targetBoard = target as Board;
@@ -27,6 +29,13 @@ namespace UnityParty.Editor
                     // @NOTE: The |= will short circuit the rest of the foreach calls when
                     //        DrawSpaceInScene() returns true.
                     needsRepaint |= DrawSpaceInScene(space);
+
+                    // If the space is linked, draw a line to it.
+                    if (space.GetNextSpace() != null) {
+                        BoardSpace nextSpace = space.GetNextSpace();
+
+                        Handles.DrawLine(space.GetPosition(), nextSpace.GetPosition());
+                    }
                 }
             }
 
@@ -68,16 +77,16 @@ namespace UnityParty.Editor
                             }
 
                             // TEMP select space button.
-                            // if (GUILayout.Button(EditorGUIUtility.IconContent("d_MoveTool"), GUILayout.Width(25))) {
-                            //     if (selectedBoardSpace == space) {
-                            //         selectedBoardSpace = null;
-                            //     }
-                            //     else {
-                            //         selectedBoardSpace = space;
-                            //     }
+                            if (GUILayout.Button(EditorGUIUtility.IconContent("d_MoveTool"), GUILayout.Width(25))) {
+                                if (selectedBoardSpace == space) {
+                                    selectedBoardSpace = null;
+                                }
+                                else {
+                                    selectedBoardSpace = space;
+                                }
 
-                            //     needsRepaint = true;
-                            // }
+                                needsRepaint = true;
+                            }
 
                             // Remove space button.
                             if (GUILayout.Button(EditorGUIUtility.IconContent("TreeEditor.Trash"), GUILayout.Width(25))) {
@@ -163,6 +172,12 @@ namespace UnityParty.Editor
                 // Select the space if you click on it in the scene.
                 if (Handles.Button(position, Quaternion.identity, 0.25f * handleSize, 0.25f * handleSize, Handles.SphereHandleCap)) {
                     needsRepaint = true;
+
+                    // Link the selected space if we're in link mode.
+                    if (isLinking && selectedBoardSpace != null) {
+                        space.LinkSpace(selectedBoardSpace);
+                    }
+
                     selectedBoardSpace = space;
                 }
             }
