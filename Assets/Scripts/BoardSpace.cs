@@ -15,10 +15,11 @@ namespace UnityParty
     [Serializable]
     public class BoardSpace
     {
-        Vector3 position;                       // This space's position, relative to the board.
+        public Vector3 position;                // This space's position, relative to the board.
+        public BoardSpace nextSpace;
+        public BoardSpace previousSpace;
+
         Board board;                            // The board this space belongs to.
-        BoardSpace nextSpace;
-        BoardSpace previousSpace;
 
         public void SetBoard(Board board)
         {
