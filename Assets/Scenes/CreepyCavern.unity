@@ -148,6 +148,8 @@ MonoBehaviour:
   NextSpace: {fileID: 878975865}
   PreviousSpace: {fileID: 1445491821}
   Flags: 0
+  OnLandEvent: {fileID: 11400000, guid: 4bde609bedd4ea347a4e9fca66893ba1, type: 2}
+  OnPassEvent: {fileID: 0}
 --- !u!1 &100928818
 GameObject:
   m_ObjectHideFlags: 0
@@ -434,6 +436,8 @@ MonoBehaviour:
   NextSpace: {fileID: 1793119398}
   PreviousSpace: {fileID: 1710910950}
   Flags: 0
+  OnLandEvent: {fileID: 11400000, guid: feeeec34ac4df6041a1baa0027cd9f52, type: 2}
+  OnPassEvent: {fileID: 0}
 --- !u!4 &150978972 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 4317098668146088, guid: 3b08ec311c210ed49beea7b1dd9cc90b, type: 3}
@@ -879,6 +883,8 @@ MonoBehaviour:
   NextSpace: {fileID: 1049458021}
   PreviousSpace: {fileID: 1329668127}
   Flags: 0
+  OnLandEvent: {fileID: 11400000, guid: feeeec34ac4df6041a1baa0027cd9f52, type: 2}
+  OnPassEvent: {fileID: 0}
 --- !u!1001 &550955318
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -1243,6 +1249,8 @@ MonoBehaviour:
   NextSpace: {fileID: 2127745575}
   PreviousSpace: {fileID: 1592716927}
   Flags: 0
+  OnLandEvent: {fileID: 11400000, guid: 4bde609bedd4ea347a4e9fca66893ba1, type: 2}
+  OnPassEvent: {fileID: 0}
 --- !u!1001 &870122414
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -1345,6 +1353,8 @@ MonoBehaviour:
   NextSpace: {fileID: 1710910950}
   PreviousSpace: {fileID: 39804208}
   Flags: 0
+  OnLandEvent: {fileID: 0}
+  OnPassEvent: {fileID: 0}
 --- !u!1 &963194225
 GameObject:
   m_ObjectHideFlags: 0
@@ -1473,6 +1483,8 @@ GameObject:
   m_Component:
   - component: {fileID: 1013845025}
   - component: {fileID: 1013845026}
+  - component: {fileID: 1013845028}
+  - component: {fileID: 1013845027}
   m_Layer: 0
   m_Name: GameplayManager
   m_TagString: Untagged
@@ -1508,6 +1520,127 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   CurrentPlayer: {fileID: 177740888}
   CurrentSpacesText: {fileID: 100928820}
+--- !u!114 &1013845027
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1013845024}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 40e513e068959d5409e286b57e2df390, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+--- !u!114 &1013845028
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1013845024}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 3ffca702c71305e449aa3258db7e49a1, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  Events:
+  - GameEvent: {fileID: 11400000, guid: 4bde609bedd4ea347a4e9fca66893ba1, type: 2}
+    UnityEvent:
+      m_PersistentCalls:
+        m_Calls:
+        - m_Target: {fileID: 1013845027}
+          m_TargetAssemblyTypeName: Assets.BoardEventDefinitions, Assembly-CSharp
+          m_MethodName: BlueSpaceLand
+          m_Mode: 1
+          m_Arguments:
+            m_ObjectArgument: {fileID: 0}
+            m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+            m_IntArgument: 0
+            m_FloatArgument: 0
+            m_StringArgument: 
+            m_BoolArgument: 0
+          m_CallState: 2
+  - GameEvent: {fileID: 11400000, guid: bf38982eefbbbd842a68d6253a54c3cd, type: 2}
+    UnityEvent:
+      m_PersistentCalls:
+        m_Calls:
+        - m_Target: {fileID: 1013845027}
+          m_TargetAssemblyTypeName: Assets.BoardEventDefinitions, Assembly-CSharp
+          m_MethodName: BranchingPathLand
+          m_Mode: 1
+          m_Arguments:
+            m_ObjectArgument: {fileID: 0}
+            m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+            m_IntArgument: 0
+            m_FloatArgument: 0
+            m_StringArgument: 
+            m_BoolArgument: 0
+          m_CallState: 2
+  - GameEvent: {fileID: 11400000, guid: 9d3d9e7e570877b4a8f482f560cf258d, type: 2}
+    UnityEvent:
+      m_PersistentCalls:
+        m_Calls:
+        - m_Target: {fileID: 1013845027}
+          m_TargetAssemblyTypeName: UnityParty.BoardEventDefinitions, Assembly-CSharp
+          m_MethodName: BankSpaceLand
+          m_Mode: 1
+          m_Arguments:
+            m_ObjectArgument: {fileID: 0}
+            m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+            m_IntArgument: 0
+            m_FloatArgument: 0
+            m_StringArgument: 
+            m_BoolArgument: 0
+          m_CallState: 2
+  - GameEvent: {fileID: 11400000, guid: 9613006342b2d574ebc26510bad66db7, type: 2}
+    UnityEvent:
+      m_PersistentCalls:
+        m_Calls:
+        - m_Target: {fileID: 1013845027}
+          m_TargetAssemblyTypeName: UnityParty.BoardEventDefinitions, Assembly-CSharp
+          m_MethodName: BankSpacePass
+          m_Mode: 1
+          m_Arguments:
+            m_ObjectArgument: {fileID: 0}
+            m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+            m_IntArgument: 0
+            m_FloatArgument: 0
+            m_StringArgument: 
+            m_BoolArgument: 0
+          m_CallState: 2
+  - GameEvent: {fileID: 11400000, guid: 195840ef45f6fc24d95ea1ca8952cf1a, type: 2}
+    UnityEvent:
+      m_PersistentCalls:
+        m_Calls:
+        - m_Target: {fileID: 1013845027}
+          m_TargetAssemblyTypeName: UnityParty.BoardEventDefinitions, Assembly-CSharp
+          m_MethodName: HappeningSpaceLand
+          m_Mode: 1
+          m_Arguments:
+            m_ObjectArgument: {fileID: 0}
+            m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+            m_IntArgument: 0
+            m_FloatArgument: 0
+            m_StringArgument: 
+            m_BoolArgument: 0
+          m_CallState: 2
+  - GameEvent: {fileID: 11400000, guid: feeeec34ac4df6041a1baa0027cd9f52, type: 2}
+    UnityEvent:
+      m_PersistentCalls:
+        m_Calls:
+        - m_Target: {fileID: 1013845027}
+          m_TargetAssemblyTypeName: UnityParty.BoardEventDefinitions, Assembly-CSharp
+          m_MethodName: RedSpaceLand
+          m_Mode: 1
+          m_Arguments:
+            m_ObjectArgument: {fileID: 0}
+            m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+            m_IntArgument: 0
+            m_FloatArgument: 0
+            m_StringArgument: 
+            m_BoolArgument: 0
+          m_CallState: 2
 --- !u!1 &1045849326 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: 1210579157289108, guid: 3b08ec311c210ed49beea7b1dd9cc90b, type: 3}
@@ -1533,6 +1666,8 @@ MonoBehaviour:
   NextSpace: {fileID: 1810381461}
   PreviousSpace: {fileID: 1905052080}
   Flags: 0
+  OnLandEvent: {fileID: 11400000, guid: 4bde609bedd4ea347a4e9fca66893ba1, type: 2}
+  OnPassEvent: {fileID: 0}
 --- !u!1 &1048157378
 GameObject:
   m_ObjectHideFlags: 0
@@ -1589,6 +1724,8 @@ MonoBehaviour:
   NextSpace: {fileID: 1905052080}
   PreviousSpace: {fileID: 531465340}
   Flags: 0
+  OnLandEvent: {fileID: 11400000, guid: 9d3d9e7e570877b4a8f482f560cf258d, type: 2}
+  OnPassEvent: {fileID: 11400000, guid: 9613006342b2d574ebc26510bad66db7, type: 2}
 --- !u!1001 &1138206987
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -1886,6 +2023,8 @@ MonoBehaviour:
   NextSpace: {fileID: 531465340}
   PreviousSpace: {fileID: 1793119398}
   Flags: 0
+  OnLandEvent: {fileID: 11400000, guid: 4bde609bedd4ea347a4e9fca66893ba1, type: 2}
+  OnPassEvent: {fileID: 0}
 --- !u!1001 &1331030368
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -2017,6 +2156,8 @@ MonoBehaviour:
   NextSpace: {fileID: 39804208}
   PreviousSpace: {fileID: 2127745575}
   Flags: 0
+  OnLandEvent: {fileID: 11400000, guid: 195840ef45f6fc24d95ea1ca8952cf1a, type: 2}
+  OnPassEvent: {fileID: 0}
 --- !u!224 &1523038773 stripped
 RectTransform:
   m_CorrespondingSourceObject: {fileID: 160621211477856677, guid: d9ef8ae328820af44bb0da840691fb00, type: 3}
@@ -2047,6 +2188,8 @@ MonoBehaviour:
   NextSpace: {fileID: 840000192}
   PreviousSpace: {fileID: 1810381461}
   Flags: 0
+  OnLandEvent: {fileID: 11400000, guid: 195840ef45f6fc24d95ea1ca8952cf1a, type: 2}
+  OnPassEvent: {fileID: 0}
 --- !u!1 &1645964413
 GameObject:
   m_ObjectHideFlags: 0
@@ -2194,6 +2337,8 @@ MonoBehaviour:
   NextSpace: {fileID: 146049255}
   PreviousSpace: {fileID: 878975865}
   Flags: 0
+  OnLandEvent: {fileID: 11400000, guid: 4bde609bedd4ea347a4e9fca66893ba1, type: 2}
+  OnPassEvent: {fileID: 0}
 --- !u!1001 &1793119396
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -2291,6 +2436,8 @@ MonoBehaviour:
   NextSpace: {fileID: 1329668127}
   PreviousSpace: {fileID: 146049255}
   Flags: 0
+  OnLandEvent: {fileID: 11400000, guid: 4bde609bedd4ea347a4e9fca66893ba1, type: 2}
+  OnPassEvent: {fileID: 0}
 --- !u!1001 &1800530979
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -2393,6 +2540,8 @@ MonoBehaviour:
   NextSpace: {fileID: 1592716927}
   PreviousSpace: {fileID: 1045849328}
   Flags: 0
+  OnLandEvent: {fileID: 11400000, guid: 4bde609bedd4ea347a4e9fca66893ba1, type: 2}
+  OnPassEvent: {fileID: 0}
 --- !u!1001 &1850095185
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -2572,6 +2721,8 @@ MonoBehaviour:
   NextSpace: {fileID: 1045849328}
   PreviousSpace: {fileID: 1049458021}
   Flags: 0
+  OnLandEvent: {fileID: 11400000, guid: 4bde609bedd4ea347a4e9fca66893ba1, type: 2}
+  OnPassEvent: {fileID: 0}
 --- !u!1001 &2061003033
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -2674,6 +2825,8 @@ MonoBehaviour:
   NextSpace: {fileID: 1445491821}
   PreviousSpace: {fileID: 840000192}
   Flags: 0
+  OnLandEvent: {fileID: 11400000, guid: 4bde609bedd4ea347a4e9fca66893ba1, type: 2}
+  OnPassEvent: {fileID: 0}
 --- !u!4 &2134079074 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 4317098668146088, guid: 3b08ec311c210ed49beea7b1dd9cc90b, type: 3}

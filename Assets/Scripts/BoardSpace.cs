@@ -2,6 +2,7 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityParty.Events;
 
 namespace UnityParty
 {
@@ -21,6 +22,8 @@ namespace UnityParty
         public BoardSpace NextSpace;
         public BoardSpace PreviousSpace;
         public SpaceFlags Flags;
+        public GameEvent OnLandEvent;
+        public GameEvent OnPassEvent;
 
         // Start is called before the first frame update
         void Start()

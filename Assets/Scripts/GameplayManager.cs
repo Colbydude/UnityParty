@@ -75,11 +75,22 @@ namespace UnityParty
             {
                 if (m_currentMovementAction.SpacesToMove > 0)
                 {
+                    // call the On Pass Event for the space (if exists)
+                    if (newSpace.OnPassEvent != null)
+                    {
+                        newSpace.OnPassEvent.Invoke();
+                    }
                     CurrentPlayer.MoveToSpace(MoveToSpaceFinished);
                 }
                 else
                 {
                     m_currentMovementAction.IsActive = false;
+
+                    // call the On Land Event for the space (if exists)
+                    if (newSpace.OnLandEvent != null)
+                    {
+                        newSpace.OnLandEvent.Invoke();
+                    }
 
                     // End Player turn
                     CurrentPlayer.EndTurn();
