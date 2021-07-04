@@ -3728,6 +3728,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   ArrowButton: {fileID: 6008827039229845420, guid: ff020de4e9cb00c4fb3cd3be1c3798d5, type: 3}
   ArrowSelectedEvent: {fileID: 11400000, guid: 565fd7a6f821b044892416b4b3c4b630, type: 2}
+  ArrowDistance: -50
 --- !u!114 &1769443678
 MonoBehaviour:
   m_ObjectHideFlags: 0

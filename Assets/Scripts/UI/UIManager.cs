@@ -13,6 +13,7 @@ namespace UnityParty.UI
         // Publics
         public GameObject ArrowButton;
         public GameEvent ArrowSelectedEvent;
+        public float ArrowDistance = -50f;
 
         // =====================================================
         // Privates
@@ -41,10 +42,15 @@ namespace UnityParty.UI
             {
                 // get vector between current space and this space
                 Vector3 direction = currentSpace.transform.position - space.transform.position;
-                float angle = Mathf.Atan2(direction.z, direction.x) * Mathf.Rad2Deg;
+
+                // move z position to y (canvas uses y)
+                direction.y = direction.z;
+                direction.z = 0;
+
+                float angle = Mathf.Atan2(direction.y, direction.x) * Mathf.Rad2Deg;
 
                 // instantiate new arrow button from prefab
-                Vector3 position = new Vector3(Screen.width * 0.5f, Screen.height * 0.5f, 0);
+                Vector3 position = new Vector3(Screen.width * 0.5f, Screen.height * 0.5f, 0) + (direction.normalized * ArrowDistance);
                 GameObject newArrow = Instantiate(ArrowButton, position, Quaternion.identity);
 
                 // assign arrow gameobject to be child of UI and update rotation
