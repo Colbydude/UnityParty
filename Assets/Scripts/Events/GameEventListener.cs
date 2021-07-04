@@ -8,16 +8,23 @@ namespace UnityParty.Events
 {
     public class GameEventListener : MonoBehaviour
     {
+        // =====================================================
+        // Publics
+
+        // Using this struct to simulate dictionary in unity editor
         [Serializable]
         public struct Event
         {
             public GameEvent GameEvent;
-            public UnityEvent UnityEvent;
+            public UnityEvent<EventContext> UnityEvent;
         }
 
+        // This gets converted to dictionary at game start
         public Event[] Events;
 
-        private Dictionary<GameEvent, UnityEvent> m_eventDictionary = new Dictionary<GameEvent, UnityEvent>();
+        // =====================================================
+        // Privates
+        private Dictionary<GameEvent, UnityEvent<EventContext>> m_eventDictionary = new Dictionary<GameEvent, UnityEvent<EventContext>>();
 
         public void Start()
         {
@@ -44,9 +51,10 @@ namespace UnityParty.Events
             }
         }
 
-        public void RaiseEvent(GameEvent gameEvent)
+        public void RaiseEvent(GameEvent gameEvent, EventContext e)
         {
-            m_eventDictionary[gameEvent].Invoke();
+            // Call the corresponding unity event
+            m_eventDictionary[gameEvent].Invoke(e);
         }
     }
 }

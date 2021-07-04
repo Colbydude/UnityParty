@@ -1,6 +1,7 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using UnityEditor;
 using UnityEngine;
 using UnityParty.Events;
 
@@ -19,11 +20,12 @@ namespace UnityParty
 
         // =====================================================
         // Publics
-        public BoardSpace NextSpace;
-        public BoardSpace PreviousSpace;
         public SpaceFlags Flags;
-        public GameEvent OnLandEvent;
-        public GameEvent OnPassEvent;
+        public List<BoardSpace> NextSpace;
+        public List<BoardSpace> PreviousSpace;
+        public List<GameEvent> OnLandEvent;
+        public List<GameEvent> OnPassEvent;
+
 
         // Start is called before the first frame update
         void Start()
@@ -35,6 +37,22 @@ namespace UnityParty
         void Update()
         {
 
+        }
+
+        public void InvokeOnLandEvents()
+        {
+            foreach (GameEvent e in OnLandEvent)
+            { 
+                e.Invoke(new EventContext(gameObject));
+            }
+        }
+
+        public void InvokeOnPassEvents()
+        {
+            foreach (GameEvent e in OnPassEvent)
+            {
+                e.Invoke(new EventContext(gameObject));
+            }
         }
     }
 }

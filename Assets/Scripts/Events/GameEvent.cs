@@ -8,13 +8,15 @@ namespace UnityParty.Events
 
     public class GameEvent : ScriptableObject
     {
+        // =====================================================
+        // Privates 
         private HashSet<GameEventListener> listeners = new HashSet<GameEventListener>();
 
-        public void Invoke()
+        public void Invoke(EventContext e)
         {
             foreach (GameEventListener listener in listeners)
             {
-                listener.RaiseEvent(this);
+                listener.RaiseEvent(this, e);
             }
         }
 

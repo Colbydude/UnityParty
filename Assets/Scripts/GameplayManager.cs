@@ -2,8 +2,8 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityParty.Events;
 using UnityParty.Helpers;
-using UnityParty.Helpers.States;
 
 namespace UnityParty
 {
@@ -40,20 +40,26 @@ namespace UnityParty
         public void HandlePlayerInputConfirm()
         {
             IState playerCurrentState = CurrentPlayer.GetPlayerState();
-            if (!m_currentMovementAction.IsActive && playerCurrentState.GetType() == typeof(WaitingForInput))
+            if (playerCurrentState.GetType() == typeof(WaitingForRoll))
             {
                 MakeRoll();
             }
+        }
+
+        public void PathSelected(EventContext e)
+        {
+            BoardSpace nextSpace = (BoardSpace)e.Parameters["next_space"];
+            CurrentPlayer.ChangeState<Walking>();
+            CurrentPlayer.MoveToSpace(MoveToSpaceFinished, nextSpace);
         }
 
         void MakeRoll()
         {
             // Generate random number for the current player to move.
             m_currentMovementAction.SpacesToMove = m_random.Next(1, 11);
-            m_currentMovementAction.IsActive = true;
             RefreshCurrentSpacesText();
 
-            CurrentPlayer.MoveToSpace(MoveToSpaceFinished);
+            CurrentPlayer.MoveToSpace(MoveToSpaceFinished, CurrentPlayer.GetCurrentSpace().NextSpace[0]);
         }
 
         void MoveToSpaceFinished(BoardSpace newSpace)
@@ -65,36 +71,26 @@ namespace UnityParty
                 RefreshCurrentSpacesText();
             }
 
-            if (newSpace.Flags.HasFlag(BoardSpace.SpaceFlags.Stoppable))
+     
+            if (m_currentMovementAction.SpacesToMove > 0)
             {
-                // uhhh transfer control to a different controller/manager?
-                // would probably have some data in the BoardSpace to point to whatever is taking control.
-                // the new manager needs some sort of "Finished" function so we know to continue moving afterwards (if spaces to move left).
+                // call the On Pass Event for the space 
+                newSpace.InvokeOnPassEvents();
+
+                // check if we're still walking so that we can move to the next space
+                // otherwise the state's been changed by space's events and some action is needed
+                if (CurrentPlayer.GetPlayerState().GetType() == typeof(Walking))
+                {
+                    CurrentPlayer.MoveToSpace(MoveToSpaceFinished, newSpace.NextSpace[0]);
+                }
             }
             else
             {
-                if (m_currentMovementAction.SpacesToMove > 0)
-                {
-                    // call the On Pass Event for the space (if exists)
-                    if (newSpace.OnPassEvent != null)
-                    {
-                        newSpace.OnPassEvent.Invoke();
-                    }
-                    CurrentPlayer.MoveToSpace(MoveToSpaceFinished);
-                }
-                else
-                {
-                    m_currentMovementAction.IsActive = false;
+                // call the On Land Events for the space 
+                newSpace.InvokeOnLandEvents();
 
-                    // call the On Land Event for the space (if exists)
-                    if (newSpace.OnLandEvent != null)
-                    {
-                        newSpace.OnLandEvent.Invoke();
-                    }
-
-                    // End Player turn
-                    CurrentPlayer.EndTurn();
-                }
+                // End Player turn
+                CurrentPlayer.EndTurn();
             }
         }
 

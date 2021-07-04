@@ -2,7 +2,6 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityParty.Helpers;
-using UnityParty.Helpers.States;
 
 namespace UnityParty
 {
@@ -33,11 +32,12 @@ namespace UnityParty
             m_characterTransform = gameObject.transform;
 
             m_playerStateMachine.AddState<Inactive>();
+            m_playerStateMachine.AddState<WaitingForRoll>();
             m_playerStateMachine.AddState<WaitingForInput>();
             m_playerStateMachine.AddState<Walking>();
 
             //change later
-            m_playerStateMachine.ChangeState<WaitingForInput>();
+            m_playerStateMachine.ChangeState<WaitingForRoll>();
         }
 
         // Update is called once per frame
@@ -71,10 +71,10 @@ namespace UnityParty
             }
         }
 
-        public void MoveToSpace(MoveToSpaceFinishedDelegate callback)
+        public void MoveToSpace(MoveToSpaceFinishedDelegate callback, BoardSpace nextSpace)
         {
             // Move to the space we've selected next (if selectable).
-            CurrentSpace = CurrentSpace.NextSpace;
+            CurrentSpace = nextSpace;
 
             //Character rotates towards the target space
             RotatePlayer(CurrentSpace.transform.position);
@@ -128,14 +128,24 @@ namespace UnityParty
 
         public void EndTurn()
         {
-            // Character rotates south (sometimes its a bit off, not sure why)
+            // Character rotates south
             RotatePlayer(transform.position - new Vector3(0, 0, 10));
-            m_playerStateMachine.ChangeState<WaitingForInput>();
+            m_playerStateMachine.ChangeState<WaitingForRoll>();
         }
 
         public IState GetPlayerState()
         {
             return m_playerStateMachine.GetCurrentState();
+        }
+
+        public void ChangeState<T>() where T : IState
+        {
+            m_playerStateMachine.ChangeState<T>();
+        }
+
+        public BoardSpace GetCurrentSpace()
+        {
+            return CurrentSpace;
         }
 
         void RotatePlayerFinished()
@@ -151,6 +161,59 @@ namespace UnityParty
             forwardVec.y = target.y;
             Vector3 targetVec = target - m_characterTransform.position;
             m_targetDir.SetLookRotation(targetVec);
+        }
+    }
+
+    // Board player state machine states
+    public class Inactive : IState
+    {
+        public void Start()
+        {
+            Debug.Log("I'm inactive Sadge");
+        }
+
+        public void Update()
+        {
+
+        }
+    }
+
+    public class WaitingForRoll : IState
+    {
+        public void Start()
+        {
+            Debug.Log("About to roll a 10");
+        }
+
+        public void Update()
+        {
+
+        }
+    }
+
+    public class Walking : IState
+    {
+        public void Start()
+        {
+            Debug.Log("MonkaSpeed");
+        }
+
+        public void Update()
+        {
+
+        }
+    }
+
+    public class WaitingForInput : IState
+    {
+        public void Start()
+        {
+            Debug.Log("waiting for input");
+        }
+
+        public void Update()
+        {
+
         }
     }
 }
