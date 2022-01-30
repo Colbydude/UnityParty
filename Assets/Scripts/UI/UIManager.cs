@@ -15,6 +15,8 @@ namespace UnityParty.UI
         public GameEvent ArrowSelectedEvent;
         public float ArrowDistance = -50f;
 
+        public TMPro.TMP_Text CurrentSpacesText;
+
         // =====================================================
         // Privates
         private Dictionary<GameObject, BoardSpace> m_arrowMapping = new Dictionary<GameObject, BoardSpace>();

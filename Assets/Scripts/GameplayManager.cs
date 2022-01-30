@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityParty.Events;
 using UnityParty.Helpers;
+using UnityParty.UI;
 
 namespace UnityParty
 {
@@ -18,7 +19,7 @@ namespace UnityParty
         // =====================================================
         // Publics
         public BoardPlayerController CurrentPlayer;
-        public TMPro.TMP_Text CurrentSpacesText;
+        public UIManager UIManager;
 
         // =====================================================
         // Privates
@@ -29,6 +30,21 @@ namespace UnityParty
         void Start()
         {
             m_random = new System.Random();
+
+            if (UIManager == null)
+            {
+                Debug.LogWarning("No UIManager set in the editor. Searching for one in the scene.");
+
+                UIManager = FindObjectOfType<UIManager>();
+                if (UIManager == null)
+                {
+                    Debug.Assert(false, "UIManager not found in the scene. Stop.");
+                }
+                else
+                {
+                    Debug.LogWarning("Found [" + UIManager + "]");
+                }
+            }
         }
 
         // Update is called once per frame
@@ -97,7 +113,7 @@ namespace UnityParty
         void RefreshCurrentSpacesText()
         {
             // Update text above player.
-            CurrentSpacesText.text = m_currentMovementAction.SpacesToMove.ToString();
+            UIManager.CurrentSpacesText.text = m_currentMovementAction.SpacesToMove.ToString();
         }
     }
 }
