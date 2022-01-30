@@ -15,7 +15,7 @@ namespace UnityParty.UI
         public GameEvent ArrowSelectedEvent;
         public float ArrowDistance = 50f;
 
-        public TMPro.TMP_Text CurrentSpacesText;
+        public TMPro.TMP_Text RemainingSpacesText;
 
         // =====================================================
         // Privates

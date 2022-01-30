@@ -113,7 +113,7 @@ namespace UnityParty
         void RefreshCurrentSpacesText()
         {
             // Update text above player.
-            UIManager.CurrentSpacesText.text = m_currentMovementAction.SpacesToMove.ToString();
+            UIManager.RemainingSpacesText.text = m_currentMovementAction.SpacesToMove.ToString();
         }
     }
 }

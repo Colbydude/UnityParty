@@ -165,7 +165,7 @@ GameObject:
   - component: {fileID: 100928821}
   - component: {fileID: 100928820}
   m_Layer: 5
-  m_Name: SpacesCounter Text (TMP)
+  m_Name: RemainingSpacesCounter Text (TMP)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -213,7 +213,7 @@ MonoBehaviour:
   m_text: 0
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
-  m_sharedMaterial: {fileID: 2180264, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
+  m_sharedMaterial: {fileID: 2100000, guid: 79459efec17a4d00a321bdcc27bbc385, type: 2}
   m_fontSharedMaterials: []
   m_fontMaterial: {fileID: 0}
   m_fontMaterials: []
@@ -3729,7 +3729,7 @@ MonoBehaviour:
   ArrowButton: {fileID: 6008827039229845420, guid: ff020de4e9cb00c4fb3cd3be1c3798d5, type: 3}
   ArrowSelectedEvent: {fileID: 11400000, guid: 565fd7a6f821b044892416b4b3c4b630, type: 2}
   ArrowDistance: 50
-  CurrentSpacesText: {fileID: 100928820}
+  RemainingSpacesText: {fileID: 100928820}
 --- !u!114 &1769443678
 MonoBehaviour:
   m_ObjectHideFlags: 0
